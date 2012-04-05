@@ -1,0 +1,350 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <title>Go By Rails Android Mobile App</title>
+  <meta name="description" content="">
+
+  <!-- Mobile viewport optimization h5bp.com/ad -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
+
+  <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
+  <script src="js/modernizr-2.0.6.min.js"></script>
+</head>
+
+<body>
+  
+  <div data-role="page" id="index">
+  	<div data-role="header" data-position="inline">
+			<h1>Go By Rails</h1>
+	</div>
+    
+    <section data-role="content">		
+    		<nav>
+    			<a href="#routes" data-role="button">Buy Ticket</a>
+    			<a href="#tickets" data-role="button">My Tickets</a>
+    			<a href="#train-schedule" data-role="button">Train Timetables</a>
+    			<a href="#live-progress" data-role="button">Live Progress</a>
+    			<a href="#feedback" data-role="button">Feedback</a>
+    			<a href="#settings" data-role="button" data-transition="flip">Settings</a>
+    		</nav>
+    </section>
+  </div>  	
+    
+  
+  <div data-role="page" id="routes">
+	<div data-role="header" data-position="inline">
+		<a href="#index" data-icon="back" data-direction="reverse">Back</a>
+		<h1>Buy Ticket</h1>
+	</div>  
+    
+    <section data-role="content">
+    		
+			<select id="select-route" data-native-menu="false" data-theme="b">
+				<option>Choose Your Route</option>
+				<option value="Accra:Nsawam">Accra - Nsawam</option>
+				<option value="Accra:Tema">Accra - Tema</option>
+			</select> 
+			
+			
+			<fieldset class="ui-grid-a">
+				<div class="ui-block-a">
+					<select id="select-from" data-native-menu="false" data-theme="a">
+						<option>From</option>
+						<option value="Accra">Accra</option>
+						<option value="Tema">Tema</option>
+					</select> 
+				</div>
+				<div class="ui-block-b">
+					<select id="select-to" data-native-menu="false" data-theme="a">
+						<option>To</option>
+						<option value="Nsawam">Nsawam</option>
+						<option value="Accra">Accra</option>
+					</select> 					
+				</div>	   
+			</fieldset>
+			
+			
+			<div class="center">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+				         <input type="radio" name="radio-view" id="radio-view-a" value=""  />
+				         <label for="radio-view-a">5:45 AM</label>
+				         <input type="radio" name="radio-view" id="radio-view-b" value=""  />
+				         <label for="radio-view-b">6:30 AM</label>
+				         <input type="radio" name="radio-view" id="radio-view-c" value=""  />
+				         <label for="radio-view-c">6:00 PM</label>
+				</fieldset>
+			</div>
+			
+			<a href="#ticket-payment" data-role="button" data-theme="d">Buy Ticket</a>
+			
+			
+    </section>
+    
+  </div>
+  
+  
+  <div data-role="page" id="ticket-payment">
+    	<div data-role="content" data-theme="a">
+			<h3>Choose Payment Option</h3>
+			<p>Choose your mobile money payment option</p>
+			
+			<a href="#ticket-payment-ok" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="c">Airtel Mobile Money</a>
+			<a href="#ticket-payment-failure" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="e">MTN Mobile Money</a>     
+			<a href="#ticket-payment-ok" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="b">Tigo Mobile Money</a>
+			
+			<a href="#routes" data-role="button" data-direction="reverse" data-theme="a">Cancel</a>
+			
+		</div>
+  </div>
+  
+  
+  <div data-role="page" id="ticket-payment-ok">
+    	<div data-role="content" data-theme="a">
+			<h3>Success!</h3>
+			<p>Your payment was successful! Ticket has been added to your tickets.</p>
+			<a href="#ticket-detail" data-role="button" data-theme="b">View Ticket</a>     
+			<a href="#index" data-role="button" data-direction="reverse" data-theme="d">Okay</a>
+		</div>
+  </div>
+  
+  
+  <div data-role="page" id="ticket-payment-failure">
+    	<div data-role="content" data-theme="a">
+			<h3>Ooooww!</h3>
+			<p>There seems to be a problem processing your payment.</p>
+			<a href="#ticket-payment-ok" data-rel="dialog" data-role="button" data-transition="slideup" data-theme="c">Try again</a>
+			<a href="#ticket-payment" data-rel="dialog" data-role="button" data-transition="slideup" data-theme="b">Try a different Account</a>
+			<a href="#index" data-role="button" data-theme="a" data-direction="reverse">Quit it!</a>
+		</div>
+  </div>
+  
+  
+  <div data-role="page" id="tickets">
+  	<div data-role="header" data-position="inline">
+		<a href="#index" data-icon="back" data-direction="reverse">Back</a>
+		<h1>My Tickets</h1>
+	</div>  
+    
+    <section>
+    	<ul data-role="listview" data-inset="true" data-split-icon="delete" data-split-theme="c">
+			<li><a href="#ticket-detail">
+				<h3>Ticket #234567890</h3>
+				<p>Accra - Tema</p>
+				<p class="ui-li-aside"><strong>4:18</strong> PM</p>
+				</a>
+			</li>
+			<li><a href="#ticket-detail">
+				<h3>Ticket #883949374</h3>
+				<p>Tema - Accra</p>
+				<p class="ui-li-aside"><strong>Used</strong> Today at <strong>4:18</strong>PM</p>
+				</a>
+				<a href="#delete-ticket" data-rel="dialog" data-transition="pop">Delete</a>
+			</li>
+			<li><a href="#ticket-detail">
+				<h3>Ticket #298477383</h3>
+				<p>Accra - Nsawam</p>
+				<p class="ui-li-aside"><strong>Used</strong> Yesterday at <strong>7:05</strong>AM</p>
+				</a>
+				<a href="#delete-ticket" data-rel="dialog" data-transition="pop">Delete</a>
+			</li>
+		</ul>
+    </section>
+    
+  </div>
+  
+  
+  <div data-role="page" id="ticket-detail">
+  	<div data-role="header" data-position="inline">
+		<a href="#tickets" data-icon="back" data-direction="reverse">Back</a>
+		<h1>Ticket Detail</h1>
+	</div> 
+	
+	<section data-role="content" class="center">
+		<h2>Ticket Detail</h4>
+		<h1>#2345749930</h1>
+		<h3>Accra - Tema</h3>
+		<h4>4:20 PM</h4>
+		
+		<a href="#" data-role="button" data-theme="e">Activate</a>
+	</section>
+	
+  </div>
+  
+  
+  <div data-role="page" id="delete-ticket">
+		<div data-role="content" data-theme="a">
+			<h3>Delete Ticket</h3>
+			<p>Are you sure you want to delete this ticket?</p>
+			<a href="#delete-ticket-ok" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="b">Delete</a>     
+			<a href="#tickets" data-role="button" data-rel="back" data-theme="a">Cancel</a>    
+		</div>
+  </div>
+  
+  <div data-role="page" id="delete-ticket-ok">
+		<div data-role="content" data-theme="a">
+			<h4>Ticket deleted successfully!</h4>
+			<a href="#tickets" data-role="button" data-theme="a">Okay</a>    
+		</div>
+  </div>
+  
+  
+  <div data-role="page" id="train-schedule">
+  	<div data-role="header" data-position="inline">
+		<a href="#index" data-icon="back" data-direction="reverse">Back</a>
+		<h1>Train Schedules</h1>
+		
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#" class="ui-btn-active">Accra - Nsawam</a></li>
+				<li><a href="#">Accra - Tema</a></li>
+			</ul>
+		</div>
+	</div>  
+    
+    <section>
+    	
+    </section>
+    
+  </div>
+  
+  
+  <div data-role="page" id="live-progress">
+  	<div data-role="header" data-position="inline">
+		<a href="#index" data-icon="back" data-direction="reverse">Back</a>
+		<h1>Live Progress</h1>
+		<a href="#live-progress" data-icon="refresh" data-direction="reverse" data-theme="b" data-iconpos="notext">Refresh</a>
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#" class="ui-btn-active">Accra - Nsawam</a></li>
+				<li><a href="#">Accra - Tema</a></li>
+			</ul>
+		</div>
+	</div>  
+    
+    <section>
+		    <fieldset data-role="controlgroup" data-type="horizontal">
+		         	<input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" checked="checked" />
+		         	<label for="radio-choice-1">Train 1</label>
+		
+		         	<input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-2"  />
+		         	<label for="radio-choice-2">Train 2</label>
+		    </fieldset>
+    </section>
+    
+  </div>
+  
+  
+  
+  
+  
+  <div data-role="page" id="settings">
+    	
+    	<div data-role="header" data-position="inline">
+				<a href="#index" data-icon="back" data-rel="back">Back</a>
+				<h1>Account Settings</h1>
+				<a href="#index" data-icon="check" data-theme="b" data-direction="reverse">Save</a>
+		</div>
+    	
+    	<section data-role="content">
+    		
+    		<form action="" method="">
+		    	<input type="text" placeholder="Name" />
+		    	<input type="email" placeholder="Email" />
+		    	<input type="tel" placeholder="Mobile number" />
+		    	
+				<input type="checkbox" name="checkbox-1" id="checkbox-1" checked="checked" />
+				<label for="checkbox-1">Use this number for mobile money payment</label>
+				
+		    	<button data-icon="check" data-theme="b" data-inline="true" data-transition="flip">Save</button>
+	    	</form>
+	    	
+    	</section>
+    	
+   </div>
+   
+   
+   
+   <div data-role="page" id="feedback">
+  	<div data-role="header" data-position="inline">
+		<a href="#index" data-icon="back" data-rel="back">Back</a>
+		<h1>Feedback</h1>
+		<a href="#feedback-new" data-icon="add" data-theme="b" data-transition="flip">New</a>
+	</div>  
+    
+    <section>
+		<ul data-role="listview" data-inset="true">
+			
+			<li><a href="#">
+				<h3>You</h3>
+				<p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
+				<p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
+				<p class="ui-li-aside"><strong>6:24</strong>PM</p>
+			</a></li>
+			
+			<li><a href="#">
+				<h3>GH-Rails</h3>
+				<p><strong>Boston Conference Planning</strong></p>
+				<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
+				<p class="ui-li-aside"><strong>2:18</strong>PM</p>
+			</a></li>
+			
+			<li><a href="#">
+				<h3>You</h3>
+				<p><strong>Boston Conference Planning</strong></p>
+				<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
+				<p class="ui-li-aside">Yesterday, <strong>9:18</strong>AM</p>
+			</a></li>
+			
+			<li><a href="#">
+				<h3>GH-Rails</h3>
+				<p><strong>Boston Conference Planning</strong></p>
+				<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
+				<p class="ui-li-aside"><strong>Last Week</strong></p>
+			</a></li>
+			
+		</ul>
+
+    	
+    </section>
+    
+  </div>
+  
+  
+  <div data-role="page" id="feedback-new">
+  	<div data-role="header" data-position="inline">
+		<a href="#feedback" data-icon="delete" data-rel="back" data-theme="c">Cancel</a>
+		<h1>Feedback</h1>
+	</div>
+	
+    <section>
+    	<form action="#feedback" method="">
+			<textarea placeholder="Compose message and send feedback"></textarea>
+			<a href="#feedback" data-role="button" data-icon="delete" data-rel="back" data-inline="true">Cancel</a>
+			<button data-icon="forward" data-theme="b" data-inline="true">Send</button>
+    	</form>
+    </section>
+  </div>
+   
+    	
+    
+  <!-- JavaScript at the bottom for fast page loading -->
+  <!-- scripts concatenated and minified via ant build script-->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery.mobile-1.0.1.min.js"></script>
+  <script src="js/helper.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/script.js"></script>
+  <!-- end scripts-->
+
+</body>
+</html>
