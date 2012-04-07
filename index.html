@@ -35,7 +35,7 @@
     			<a href="#train-schedule" data-role="button">Train Timetables</a>
     			<a href="#live-progress" data-role="button">Live Progress</a>
     			<a href="#feedback" data-role="button">Feedback</a>
-    			<a href="#settings" data-role="button" data-transition="flip">Settings</a>
+    			<a href="#settings" data-role="button" data-transition="flip" data-theme="a">Settings</a>
     		</nav>
     </section>
   </div>  	
@@ -48,51 +48,26 @@
 	</div>  
     
     <section data-role="content">
-    		
-			<select id="select-route" data-native-menu="false" data-theme="b">
-				<option>Choose Your Route</option>
-				<option value="Accra:Nsawam">Accra - Nsawam</option>
-				<option value="Accra:Tema">Accra - Tema</option>
-			</select> 
-			
-			
-			<fieldset class="ui-grid-a">
-				<div class="ui-block-a">
-					<select id="select-from" data-native-menu="false" data-theme="a">
-						<option>From</option>
-						<option value="Accra">Accra</option>
-						<option value="Tema">Tema</option>
-					</select> 
-				</div>
-				<div class="ui-block-b">
-					<select id="select-to" data-native-menu="false" data-theme="a">
-						<option>To</option>
-						<option value="Nsawam">Nsawam</option>
-						<option value="Accra">Accra</option>
-					</select> 					
-				</div>	   
-			</fieldset>
-			
-			
+
+            <fieldset data-role="controlgroup" id="route-choices">
+                <legend>Choose your route:</legend>
+                <!--input type="radio" name="route-choice" id="route-choice-1" value="choice-1" />
+                <label for="route-choice-1">Cat</label-->
+            </fieldset>
+
 			<div class="center">
-				<fieldset data-role="controlgroup" data-type="horizontal">
-				         <input type="radio" name="radio-view" id="radio-view-a" value=""  />
-				         <label for="radio-view-a">5:45 AM</label>
-				         <input type="radio" name="radio-view" id="radio-view-b" value=""  />
-				         <label for="radio-view-b">6:30 AM</label>
-				         <input type="radio" name="radio-view" id="radio-view-c" value=""  />
-				         <label for="radio-view-c">6:00 PM</label>
+				<fieldset id="route-schedules" data-role="controlgroup" data-type="horizontal">
+                    <legend>Choose Time:</legend>
+				    <!--input type="radio" name="route-schedule" id="schedule-view-1" value=""  />
+				    <label for="schedule-view-1">5:45 AM</label-->
 				</fieldset>
 			</div>
 			
-			<a href="#ticket-payment" data-role="button" data-theme="d">Buy Ticket</a>
-			
-			
+			<a href="#ticket-payment" data-role="button" data-theme="b">Buy Ticket</a>
+
     </section>
-    
   </div>
-  
-  
+
   <div data-role="page" id="ticket-payment">
     	<div data-role="content" data-theme="a">
 			<h3>Choose Payment Option</h3>
@@ -103,7 +78,6 @@
 			<a href="#ticket-payment-ok" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="b">Tigo Mobile Money</a>
 			
 			<a href="#routes" data-role="button" data-direction="reverse" data-theme="a">Cancel</a>
-			
 		</div>
   </div>
   
@@ -170,7 +144,7 @@
 	</div> 
 	
 	<section data-role="content" class="center">
-		<h2>Ticket Detail</h4>
+		<h2>Ticket Detail</h2>
 		<h1>#2345749930</h1>
 		<h3>Accra - Tema</h3>
 		<h4>4:20 PM</h4>
@@ -256,18 +230,16 @@
 		</div>
     	
     	<section data-role="content">
-    		
-    		<form action="" method="">
-		    	<input type="text" placeholder="Name" />
-		    	<input type="email" placeholder="Email" />
-		    	<input type="tel" placeholder="Mobile number" />
-		    	
-				<input type="checkbox" name="checkbox-1" id="checkbox-1" checked="checked" />
-				<label for="checkbox-1">Use this number for mobile money payment</label>
+    		<form method="post">
+		    	<input type="text"   name="user[name]" placeholder="Name" />
+		    	<input type="email"  name="user[email]" placeholder="Email" />
+		    	<input type="tel"    name="user[number]" placeholder="Mobile number" />
+		    	<input type="hidden" name="user[app_key]" />
+				<!--input type="checkbox" name="checkbox-1" id="checkbox-1" checked="checked" />
+				<label for="checkbox-1">Use this number for mobile money payment</label-->
 				
 		    	<button data-icon="check" data-theme="b" data-inline="true" data-transition="flip">Save</button>
 	    	</form>
-	    	
     	</section>
     	
    </div>
