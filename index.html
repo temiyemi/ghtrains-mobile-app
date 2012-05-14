@@ -18,25 +18,25 @@
   <link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
 
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
-  <script src="js/modernizr-2.0.6.min.js"></script>
+  <script src="js/modernizr-2.5.3.min.js"></script>
 </head>
 
 <body>
   
   <div data-role="page" id="index">
   	<div data-role="header" data-position="inline">
-			<h1>Go By Rails</h1>
+		<h1>Go By Rails</h1>
 	</div>
     
     <section data-role="content">		
-    		<nav>
-    			<a href="#routes" data-role="button">Buy Ticket</a>
-    			<a href="#tickets" data-role="button">My Tickets</a>
-    			<a href="#train-schedule" data-role="button">Train Timetables</a>
-    			<a href="#live-progress" data-role="button">Live Progress</a>
-    			<a href="#feedback" data-role="button">Feedback</a>
-    			<a href="#settings" data-role="button" data-transition="flip" data-theme="a">Settings</a>
-    		</nav>
+    	<nav>
+    		<a href="#routes" data-role="button">Buy Ticket</a>
+    		<a href="#tickets" data-role="button">My Tickets</a>
+    		<a href="#train-schedule" data-role="button">Train Timetables</a>
+    		<a href="#live-progress" data-role="button">Live Progress</a>
+    		<a href="#feedback" data-role="button">Feedback</a>
+    		<a href="#settings" data-role="button" data-transition="flip" data-theme="a">Settings</a>
+    	</nav>
     </section>
   </div>  	
     
@@ -48,23 +48,11 @@
 	</div>  
     
     <section data-role="content">
-
-            <fieldset data-role="controlgroup" id="route-choices">
-                <legend>Choose your route:</legend>
-                <!--input type="radio" name="route-choice" id="route-choice-1" value="choice-1" />
-                <label for="route-choice-1">Cat</label-->
-            </fieldset>
-
-			<div class="center">
-				<fieldset id="route-schedules" data-role="controlgroup" data-type="horizontal">
-                    <legend>Choose Time:</legend>
-				    <!--input type="radio" name="route-schedule" id="schedule-view-1" value=""  />
-				    <label for="schedule-view-1">5:45 AM</label-->
-				</fieldset>
-			</div>
-			
-			<a href="#ticket-payment" data-role="button" data-theme="b">Buy Ticket</a>
-
+        <div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
+            <h3>Select your Route</h3>
+            <fieldset data-role="controlgroup" id="route-choices"></fieldset>
+        </div>
+		<a href="#ticket-payment" data-role="button" data-theme="b">Buy Ticket</a>
     </section>
   </div>
 
@@ -178,16 +166,13 @@
 		<h1>Train Schedules</h1>
 		
 		<div data-role="navbar">
-			<ul>
-				<li><a href="#" class="ui-btn-active">Accra - Nsawam</a></li>
-				<li><a href="#">Accra - Tema</a></li>
-			</ul>
+			<ul id="all-routes"></ul>
 		</div>
-	</div>  
-    
-    <section>
-    	
-    </section>
+	</div>
+
+      <section data-role="content">
+          <ul data-role="listview"></ul>
+      </section>
     
   </div>
   
@@ -198,22 +183,11 @@
 		<h1>Live Progress</h1>
 		<a href="#live-progress" data-icon="refresh" data-direction="reverse" data-theme="b" data-iconpos="notext">Refresh</a>
 		<div data-role="navbar">
-			<ul>
-				<li><a href="#" class="ui-btn-active">Accra - Nsawam</a></li>
-				<li><a href="#">Accra - Tema</a></li>
-			</ul>
+			<ul id="all-routes-progress"></ul>
 		</div>
 	</div>  
     
-    <section>
-		    <fieldset data-role="controlgroup" data-type="horizontal">
-		         	<input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" checked="checked" />
-		         	<label for="radio-choice-1">Train 1</label>
-		
-		         	<input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-2"  />
-		         	<label for="radio-choice-2">Train 2</label>
-		    </fieldset>
-    </section>
+    <section data-role="content"></section>
     
   </div>
   
@@ -246,49 +220,14 @@
    
    
    
-   <div data-role="page" id="feedback">
+  <div data-role="page" id="feedback">
   	<div data-role="header" data-position="inline">
 		<a href="#index" data-icon="back" data-rel="back">Back</a>
 		<h1>Feedback</h1>
 		<a href="#feedback-new" data-icon="add" data-theme="b" data-transition="flip">New</a>
-	</div>  
-    
-    <section>
-		<ul data-role="listview" data-inset="true">
-			
-			<li><a href="#">
-				<h3>You</h3>
-				<p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
-				<p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
-				<p class="ui-li-aside"><strong>6:24</strong>PM</p>
-			</a></li>
-			
-			<li><a href="#">
-				<h3>GH-Rails</h3>
-				<p><strong>Boston Conference Planning</strong></p>
-				<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
-				<p class="ui-li-aside"><strong>2:18</strong>PM</p>
-			</a></li>
-			
-			<li><a href="#">
-				<h3>You</h3>
-				<p><strong>Boston Conference Planning</strong></p>
-				<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
-				<p class="ui-li-aside">Yesterday, <strong>9:18</strong>AM</p>
-			</a></li>
-			
-			<li><a href="#">
-				<h3>GH-Rails</h3>
-				<p><strong>Boston Conference Planning</strong></p>
-				<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
-				<p class="ui-li-aside"><strong>Last Week</strong></p>
-			</a></li>
-			
-		</ul>
-
-    	
+	</div>
+    <section data-role="content">
     </section>
-    
   </div>
   
   
@@ -299,8 +238,9 @@
 	</div>
 	
     <section>
-    	<form action="#feedback" method="">
-			<textarea placeholder="Compose message and send feedback"></textarea>
+    	<form method="post">
+            <input type="hidden" name="feedback[status]" value="customer" />
+			<textarea name="feedback[message]" placeholder="Compose message and send feedback"></textarea>
 			<a href="#feedback" data-role="button" data-icon="delete" data-rel="back" data-inline="true">Cancel</a>
 			<button data-icon="forward" data-theme="b" data-inline="true">Send</button>
     	</form>

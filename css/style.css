@@ -224,11 +224,39 @@ section nav {
 	width:96%;
 }
 
-.center {
-	text-align:center;
-	margin:auto;
-	width:80%;
+div#live-progress section ul li div{
+    position: relative;
+    display: inline-block;
+    width: 33%;
 }
+div#live-progress section ul li div span.ul-li-count{
+
+}
+div#live-progress section ul li div.a{
+    width: 20%;
+}
+div#live-progress section ul li div.b{
+    width: auto;
+    padding-left: 30px;
+    /*position: relative;
+    display: inline-block;
+    width: 33%;
+    top:10px;*/
+}
+div#live-progress section ul li div.c{
+    width: 60%;
+    /*position: relative;
+    display: inline-block;
+    width: 33%;
+    top:10px;*/
+}
+/*
+li span.left {
+    left:0 !important;
+    right: auto !important;
+    position: relative !important;
+}
+*/
 
 /*
  * Media queries for responsive design github.com/h5bp/mobile-boilerplate/wiki/The-Style
