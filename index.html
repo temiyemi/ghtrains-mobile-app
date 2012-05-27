@@ -23,160 +23,119 @@
 
 <body>
   
-  <div data-role="page" id="index">
-  	<div data-role="header" data-position="inline">
-		<h1>Go By Rails</h1>
+  <div data-role="page" id="index" data-theme="a">
+  	<div data-role="header">
+		<h1><img src="img/ghana.png" /> Ghana Train Service</h1>
 	</div>
-    
-    <section data-role="content">		
-    	<nav>
-    		<a href="#routes" data-role="button">Buy Ticket</a>
-    		<a href="#tickets" data-role="button">My Tickets</a>
-    		<a href="#train-schedule" data-role="button">Train Timetables</a>
-    		<a href="#live-progress" data-role="button">Live Progress</a>
-    		<a href="#feedback" data-role="button">Feedback</a>
-    		<a href="#settings" data-role="button" data-transition="flip" data-theme="a">Settings</a>
-    	</nav>
+    <section data-role="content">
+    	<ul data-role="listview" data-inset="true">
+    		<li><a href="#routes">Buy Train Ticket</a></li>
+            <li><a href="#tickets">Purchased Tickets <span class="ui-li-count" id="ticket-count">0</span></a></li>
+            <li><a href="#train-schedule">Train Timetable</a></li>
+            <li><a href="#live-progress">Live Progress</a></li>
+            <li><a href="#feedback">Feedback <span class="ui-li-count" id="feedback-count">0</span></a></li>
+            <li><a href="#settings" data-transition="flip">Account Settings</a></li>
+    	</ul>
     </section>
   </div>  	
-    
-  
-  <div data-role="page" id="routes">
-	<div data-role="header" data-position="inline">
+
+  <div data-role="page" id="routes" data-theme="a">
+	<div data-role="header">
 		<a href="#index" data-icon="back" data-direction="reverse">Back</a>
-		<h1>Buy Ticket</h1>
-	</div>  
-    
+		<h1>Buy Train Ticket</h1>
+	</div>
     <section data-role="content">
-        <div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
-            <h3>Select your Route</h3>
+        <div data-role="collapsible" data-collapsed="false" data-content-theme="a">
+            <h3>Choose Travel Route</h3>
             <fieldset data-role="controlgroup" id="route-choices"></fieldset>
         </div>
-		<a href="#ticket-payment" data-role="button" data-theme="b">Buy Ticket</a>
+		<a href="#ticket-payment" data-role="button" data-theme="b" data-rel="dialog" data-transition="slideup">Continue to payment</a>
     </section>
   </div>
 
-  <div data-role="page" id="ticket-payment">
-    	<div data-role="content" data-theme="a">
-			<h3>Choose Payment Option</h3>
-			<p>Choose your mobile money payment option</p>
-			
-			<a href="#ticket-payment-ok" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="c">Airtel Mobile Money</a>
-			<a href="#ticket-payment-failure" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="e">MTN Mobile Money</a>     
-			<a href="#ticket-payment-ok" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="b">Tigo Mobile Money</a>
-			
-			<a href="#routes" data-role="button" data-direction="reverse" data-theme="a">Cancel</a>
-		</div>
+  <div data-role="page" id="ticket-payment" data-theme="c">
+    	<section data-role="content">
+			<h3>Pay with MTN Mobile Money</h3>
+			<p>Enter your MTN Mobile Money account number (i.e. your MTN phone number)</p>
+
+            <input type="text" name="mobile_money_number" placeholder="MTN number" />
+
+            <fieldset data-role="controlgroup">
+                    <input type="checkbox" id="set-default" />
+                    <label for="set-default">Set this as my default</label>
+            </fieldset>
+
+
+            <a href="#ticket-payment-failure" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="b" id="pay">Make Payment</a>
+			<a href="#routes" data-role="button" data-direction="reverse">Cancel</a>
+		</section>
   </div>
-  
-  
-  <div data-role="page" id="ticket-payment-ok">
-    	<div data-role="content" data-theme="a">
+
+  <div data-role="page" id="ticket-payment-ok" data-theme="a">
+    	<div data-role="content">
 			<h3>Success!</h3>
-			<p>Your payment was successful! Ticket has been added to your tickets.</p>
+			<p>
+                Your payment was successful! Ticket has been added to your tickets.
+                GHc 1.00 has been deducted from your account.
+            </p>
 			<a href="#ticket-detail" data-role="button" data-theme="b">View Ticket</a>     
 			<a href="#index" data-role="button" data-direction="reverse" data-theme="d">Okay</a>
 		</div>
   </div>
-  
-  
+
   <div data-role="page" id="ticket-payment-failure">
     	<div data-role="content" data-theme="a">
-			<h3>Ooooww!</h3>
-			<p>There seems to be a problem processing your payment.</p>
-			<a href="#ticket-payment-ok" data-rel="dialog" data-role="button" data-transition="slideup" data-theme="c">Try again</a>
-			<a href="#ticket-payment" data-rel="dialog" data-role="button" data-transition="slideup" data-theme="b">Try a different Account</a>
-			<a href="#index" data-role="button" data-theme="a" data-direction="reverse">Quit it!</a>
+			<h3>Ooopps!</h3>
+			<p>There was a problem processing your payment.</p>
+			<a href="#ticket-payment" data-rel="dialog" data-role="button" data-transition="slideup" data-theme="c">Try again</a>
+			<a href="#index" data-role="button" data-theme="a" data-direction="reverse">Naah! Quit</a>
 		</div>
   </div>
-  
-  
-  <div data-role="page" id="tickets">
-  	<div data-role="header" data-position="inline">
+
+  <div data-role="page" id="tickets" data-theme="e">
+  	<div data-role="header">
 		<a href="#index" data-icon="back" data-direction="reverse">Back</a>
-		<h1>My Tickets</h1>
-	</div>  
-    
-    <section>
-    	<ul data-role="listview" data-inset="true" data-split-icon="delete" data-split-theme="c">
-			<li><a href="#ticket-detail">
-				<h3>Ticket #234567890</h3>
-				<p>Accra - Tema</p>
-				<p class="ui-li-aside"><strong>4:18</strong> PM</p>
-				</a>
-			</li>
-			<li><a href="#ticket-detail">
-				<h3>Ticket #883949374</h3>
-				<p>Tema - Accra</p>
-				<p class="ui-li-aside"><strong>Used</strong> Today at <strong>4:18</strong>PM</p>
-				</a>
-				<a href="#delete-ticket" data-rel="dialog" data-transition="pop">Delete</a>
-			</li>
-			<li><a href="#ticket-detail">
-				<h3>Ticket #298477383</h3>
-				<p>Accra - Nsawam</p>
-				<p class="ui-li-aside"><strong>Used</strong> Yesterday at <strong>7:05</strong>AM</p>
-				</a>
-				<a href="#delete-ticket" data-rel="dialog" data-transition="pop">Delete</a>
-			</li>
-		</ul>
-    </section>
-    
+		<h1>Purchased Tickets</h1>
+        <a href="#routes" data-icon="add" data-transition="flip" data-theme="e">Buy Ticket</a>
+	</div>
+    <section data-role="content"></section>
   </div>
-  
-  
-  <div data-role="page" id="ticket-detail">
-  	<div data-role="header" data-position="inline">
+
+  <div data-role="page" id="ticket-detail" data-theme="e">
+  	<div data-role="header">
 		<a href="#tickets" data-icon="back" data-direction="reverse">Back</a>
 		<h1>Ticket Detail</h1>
-	</div> 
-	
-	<section data-role="content" class="center">
-		<h2>Ticket Detail</h2>
-		<h1>#2345749930</h1>
-		<h3>Accra - Tema</h3>
-		<h4>4:20 PM</h4>
-		
-		<a href="#" data-role="button" data-theme="e">Activate</a>
-	</section>
-	
+	</div>
+	<section data-role="content"></section>
   </div>
-  
-  
-  <div data-role="page" id="delete-ticket">
-		<div data-role="content" data-theme="a">
+
+  <div data-role="page" id="delete-ticket" data-theme="a">
+		<section data-role="content">
 			<h3>Delete Ticket</h3>
 			<p>Are you sure you want to delete this ticket?</p>
 			<a href="#delete-ticket-ok" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="b">Delete</a>     
-			<a href="#tickets" data-role="button" data-rel="back" data-theme="a">Cancel</a>    
-		</div>
+			<a href="#tickets" data-role="button" data-rel="back">Cancel</a>
+		</section>
   </div>
   
-  <div data-role="page" id="delete-ticket-ok">
-		<div data-role="content" data-theme="a">
+  <div data-role="page" id="delete-ticket-ok" data-theme="a">
+		<section data-role="content">
 			<h4>Ticket deleted successfully!</h4>
-			<a href="#tickets" data-role="button" data-theme="a">Okay</a>    
-		</div>
+			<a href="#tickets" data-role="button">Okay</a>
+		</section>
   </div>
-  
-  
+
   <div data-role="page" id="train-schedule">
-  	<div data-role="header" data-position="inline">
+  	<div data-role="header">
 		<a href="#index" data-icon="back" data-direction="reverse">Back</a>
-		<h1>Train Schedules</h1>
-		
+		<h1>Train Timetable</h1>
 		<div data-role="navbar">
 			<ul id="all-routes"></ul>
 		</div>
 	</div>
-
-      <section data-role="content">
-          <ul data-role="listview"></ul>
-      </section>
-    
+    <section data-role="content"></section>
   </div>
-  
-  
+
   <div data-role="page" id="live-progress">
   	<div data-role="header" data-position="inline">
 		<a href="#index" data-icon="back" data-direction="reverse">Back</a>
@@ -186,58 +145,44 @@
 			<ul id="all-routes-progress"></ul>
 		</div>
 	</div>  
-    
     <section data-role="content"></section>
-    
   </div>
-  
-  
-  
-  
-  
-  <div data-role="page" id="settings">
-    	
-    	<div data-role="header" data-position="inline">
-				<a href="#index" data-icon="back" data-rel="back">Back</a>
-				<h1>Account Settings</h1>
-				<a href="#index" data-icon="check" data-theme="b" data-direction="reverse">Save</a>
+
+  <div data-role="page" id="settings" data-theme="e">
+    	<div data-role="header">
+			<a href="#index" data-icon="back" data-rel="back">Back</a>
+			<h1>Account Settings</h1>
+			<a href="#index" data-icon="check" data-theme="e" data-direction="reverse">Save</a>
 		</div>
-    	
     	<section data-role="content">
     		<form method="post">
 		    	<input type="text"   name="user[name]" placeholder="Name" />
 		    	<input type="email"  name="user[email]" placeholder="Email" />
-		    	<input type="tel"    name="user[number]" placeholder="Mobile number" />
+		    	<input type="text"    name="user[number]" placeholder="Mobile Number" />
 		    	<input type="hidden" name="user[app_key]" />
-				<!--input type="checkbox" name="checkbox-1" id="checkbox-1" checked="checked" />
-				<label for="checkbox-1">Use this number for mobile money payment</label-->
+				<input type="checkbox" id="set-default-number" />
+				<label for="set-default-number">Set mobile number as default for mobile money</label>
 				
-		    	<button data-icon="check" data-theme="b" data-inline="true" data-transition="flip">Save</button>
+		    	<button data-icon="check" data-theme="e" data-inline="true" data-transition="flip">Save</button>
 	    	</form>
     	</section>
-    	
-   </div>
-   
-   
-   
+  </div>
+
   <div data-role="page" id="feedback">
-  	<div data-role="header" data-position="inline">
+  	<div data-role="header">
 		<a href="#index" data-icon="back" data-rel="back">Back</a>
 		<h1>Feedback</h1>
 		<a href="#feedback-new" data-icon="add" data-theme="b" data-transition="flip">New</a>
 	</div>
-    <section data-role="content">
-    </section>
+    <section data-role="content"></section>
   </div>
   
-  
   <div data-role="page" id="feedback-new">
-  	<div data-role="header" data-position="inline">
+  	<div data-role="header">
 		<a href="#feedback" data-icon="delete" data-rel="back" data-theme="c">Cancel</a>
 		<h1>Feedback</h1>
 	</div>
-	
-    <section>
+    <section data-role="content">
     	<form method="post">
             <input type="hidden" name="feedback[status]" value="customer" />
 			<textarea name="feedback[message]" placeholder="Compose message and send feedback"></textarea>
@@ -246,17 +191,13 @@
     	</form>
     </section>
   </div>
-   
-    	
-    
+
   <!-- JavaScript at the bottom for fast page loading -->
-  <!-- scripts concatenated and minified via ant build script-->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.mobile-1.0.1.min.js"></script>
   <script src="js/helper.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/script.js"></script>
   <!-- end scripts-->
-
 </body>
 </html>

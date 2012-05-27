@@ -18,8 +18,6 @@ window.log = function(){
 
 // place any jQuery/helper plugins in here, instead of separate, slower script files.
 
-
-
 // Prototype Extensions
 if (!Array.prototype.every)
 {
@@ -64,17 +62,15 @@ if (!Array.prototype.filter) {
 
 if (!Date.prototype.toTwelveHourTimeString) {
     Date.prototype.toTwelveHourTimeString = function() {
-        var time = this.toTimeString().slice(0,5),
-            hour = parseInt(time.substr(0,2), 10), // parseInt inconsistent
-            ext  = 'am';
-        if (hour >= 12) ext = 'pm';
-        if (hour > 12) hour -= 12;
-        if (hour == 0) hour = 12;
-        time = hour + time.slice(2) + ext;
-        return time;
+        var hours = this.getHours();
+        var ext = hours >= 12 ? 'pm' : 'am';
+        if (hours == 0) hours = 12;
+        if (hours > 12) hours -= 12;
+        var mins = this.getMinutes();
+        if (mins < 10) mins = '0' + mins
+        return hours + ':' + mins + ext;
     };
 }
-
 
 /*
  * object.watch polyfill
@@ -124,14 +120,4 @@ if (!Object.prototype.unwatch) {
             this[prop] = val;
         }
     });
-}
-
-if (window.addEventListener) {
-    window.addEventListener("storage", handle_storage, false);
-} else {
-    window.attachEvent("onstorage", handle_storage);
 };
-
-function handle_storage(e) {
-    if (!e) { e = window.event; }
-}
