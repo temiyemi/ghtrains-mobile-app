@@ -223,17 +223,19 @@ div#live-progress section ul li div.c{ width: 40%; }
 span.status {
     padding: 2px 8px;
     line-height: 1.1;
-    border: solid 1px #9C9C9C;
+    border: solid 1px #9F9F9F;
     border-radius: 10px;
-    font-size: 76%;
+    font-size: 74%;
     text-shadow: none;
+    background: #f0f0f0;
 }
-span.status.departed { background: red }
+/*span.status.stops.by { background: orange}
 span.status.to.depart { background: #ff4500}
-span.status.arrived { background: green }
-span.status.to.arrive { background: #9acd32}
-span.status.left { background: #adff2f }
-span.status.stops.by { background: orange}
+span.status.to.arrive { background: #9acd32}*/
+span.status.departed,
+span.status.arrived,
+span.status.left { background: #f9f9f9 }
+span.status.at { background: #9acd32 }
 
 table {
     width: 100%;

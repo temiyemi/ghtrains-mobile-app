@@ -78,15 +78,14 @@ var cron = {
                 dataType:'jsonp',
                 data:"status=used&app_key=" + app.account.app_key,
                 success:resync.tickets
-            }).complete(function(){cron.ready=false});
+            }).complete(function(){cron.ready=false; tickets = []});
         };
     }
 };
 
 cron.watch('ready', function(prop,oldVal,newVal) {
     console.log('watching cron: ready ' + cron.ready);
-    if (newVal !== true) {
-    } else new cron.run();
+    if (newVal === true) cron.run();
     return newVal;
 });
 
@@ -120,7 +119,7 @@ $(document).on('ready', function () {
 
     // On 1st launch: if no app.account.app_key in LocalStorage,
     // then register user and set user's app_key
-    if (typeof app.account.app_key === undefined) {
+    if (app.account.app_key === undefined) {
         $('div#settings form').submit();
     }
 
@@ -129,7 +128,7 @@ $(document).on('ready', function () {
     //: Trains schedules, Routes  etc
     $.getJSON(urls.data + '?callback=?', resync.data);
 
-    if (app.account !== null && app.account.app_key !== undefined) {
+    if (app.account.app_key !== undefined) {
         //: User's feedback
         $.getJSON(urls.feedback + '/' + app.account.app_key + '?callback=?', resync.feedback);
         //: User's tickets
@@ -277,13 +276,12 @@ $(document).on('pageshow', 'div#ticket-detail', function () {
     $('div#ticket-detail section').html($details);
     $('div#ticket-detail').trigger('create');
 
-    $('div#ticket-detail section').on('click', 'button', function (evt) {
-        evt.stopImmediatePropagation();
+    $('div#ticket-detail section').on('click', 'button', function () {
         // Activate Ticket
         $.ajax({
             url:urls.tickets + '/edit/' + ticket.id + '?callback=?',
             dataType:'jsonp',
-            data:"app_key=" + app.account.app_key + "&status=active",
+            data:"status=active&app_key=" + app.account.app_key,
             success:resync.tickets
         }).complete(function () {
                 selected.ticket.status = 'active';
