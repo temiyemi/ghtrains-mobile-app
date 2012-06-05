@@ -35,15 +35,12 @@ var AppInstance = function (prop, value) {
 /* Declare Singleton global variable for passing data through screens */
 var selected = { ticket:null, error:null };
 
-//if (Modernizr.localstorage) {
-    if (store.getItem('app')) {
-        app = JSON.parse(store.getItem('app'));
-    }
-//}
+if (store.getItem('app')) {
+    app = JSON.parse(store.getItem('app'));
+}
 
-$.each(['account', 'data', 'feedback', 'tickets', 'payment'], function (index, object) {
+$.each(['account', 'data', 'feedback', 'tickets'], function (index, object) {
     app.watch(object, function (prop, oldval, newval) {
-        // console.log('Watching app.' + prop);
         new AppInstance(prop, newval);
         return newval;
     });
@@ -98,39 +95,34 @@ cron = {
 
 cron.watch('ready', function (prop, oldVal, newVal) {
     if (newVal === true) {
-        //console.log('Running background cron...');
         cron.run();
     }
     return newVal;
 });
 
-
-var ERROR_MESSAGES = {
-
-    //Insufficient balance -- your fault
-    1: "Sorry but your payment could not be processed. Are you sure you have enough funds left on your mobile money account?",
-
-    //Invalid Transaction amount -- server fault. try again
-    2: "Sorry but your ticket could not be issued. Please try again soon, or contact us if this problem persists.",
-
-    //Invalid Mobile Number --  your fault
-    3: "Sorry, we could not process your payment. Are you sure your mobile money number " + app.payment.mobile
-        +" is correct? You may update this in your Account Settings, and try again.",
-
-    //Invalid PIN -- your fault
-    4: "Sorry, we could not process your payment. Are you sure your mobile money PIN is correct? "
-        + "You may update it again in your Account Settings, and try back.",
-
-    //Incomplete parameters -- your fault
-    5: "Sorry, we could not process your payment. Are you sure you have updated your Billing Info? "
-        + "To be sure, update your mobile money number and PIN info in your Account Settings, and try again.",
-
-    //Unknown error -- obviously, server fault. try again
-    6: "Sorry but your ticket could not be issued. Please try again soon, or contact us if this problem persists."
-
-}
-
-
+var getErrorMessage = function(code) {
+    var msg;
+    if (code == 1) {
+        msg = "Sorry but your payment could not be processed. Are you sure you have enough funds left on your mobile money account?";
+    } else if (code == 2) {
+        msg = "Sorry but your ticket could not be issued. Please try again soon, or contact us if this problem persists.";
+    } else if (code == 3) {
+        msg = "Sorry, we could not process your payment. Are you sure your mobile money number " + app.payment.mobile
+            + " is correct? You may update this in your Account Settings, and try again.";
+    } else if (code == 4) {
+        msg = "Sorry, we could not process your payment. Are you sure your mobile money PIN is correct? "
+            + "You may update it again in your Account Settings, and try back.";
+    } else if (code == 5) {
+        msg = "Sorry, we could not process your payment. Are you sure you have updated your Billing Info? "
+            + "To be sure, update your mobile money number and PIN info in your Account Settings, and try again.";
+    } else if (code == 6) {
+        msg = "Sorry but it seems " + app.payment.mobile + " is not registered for Mobile Money. "
+            + "Please update your account information with your registered Mobile Money number and PIN, and try again.";
+    } else {
+        msg = "Sorry but your ticket could not be issued. Please try again soon, or contact us if this problem persists.";
+    }
+    return msg;
+};
 
 
 $(document).on('ready', function () {
@@ -139,7 +131,6 @@ $(document).on('ready', function () {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        app.payment.mobile = $('input[name="user[number]"]').val();
         app.payment.pin = $('input#pin').val();
 
         $.ajax({
@@ -149,6 +140,7 @@ $(document).on('ready', function () {
             success:resync.account
         }).complete(function () {
                 $.mobile.changePage($('div#index'));
+                app.payment.mobile = app.account.number;
             });
     });
 
@@ -220,12 +212,6 @@ $(document).on('pagecreate', 'div#routes', function () {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        if (isNaN(app.payment.mobile) || isNaN(app.payment.pin)) {
-            // prompt user to update billing info
-
-        };
-
-
         // send the chosen schedule_id, with the app_key and the mobile_money_number
         var schedule_id = (function () {
             var id = null;
@@ -262,10 +248,7 @@ $(document).on('pagecreate', 'div#routes', function () {
 });
 
 $(document).on('pageshow', 'div#ticket-payment-fail', function () {
-    //var keys = Object.keys(selected.error);
-    //if (typeof selected.error !== null) {
-    $('p#error_message').html(ERROR_MESSAGES[selected.error.code]);
-    //}
+    $('p#error_message').html(getErrorMessage(selected.error.code));
 });
 
 $(document).on('pagehide', 'div#ticket-payment-fail', function () {
