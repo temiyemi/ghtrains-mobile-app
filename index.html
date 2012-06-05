@@ -49,45 +49,28 @@
             <h3>Choose Travel Route</h3>
             <fieldset data-role="controlgroup" id="route-choices"></fieldset>
         </div>
-		<a href="#ticket-payment" data-role="button" data-theme="b" data-rel="dialog" data-transition="slideup">Continue to payment</a>
+
+        <a href="#ticket-payment-ok" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="b" id="pay">Buy Ticket</a>
     </section>
-  </div>
-
-  <div data-role="page" id="ticket-payment" data-theme="c">
-    	<section data-role="content">
-			<h3>Pay with MTN Mobile Money</h3>
-			<p>Enter your MTN Mobile Money account number (i.e. your MTN phone number)</p>
-
-            <input type="text" name="mobile_money_number" placeholder="MTN number" />
-
-            <fieldset data-role="controlgroup">
-                    <input type="checkbox" id="set-default" />
-                    <label for="set-default">Set this as my default</label>
-            </fieldset>
-
-
-            <a href="#ticket-payment-failure" data-role="button" data-rel="dialog" data-transition="slidedown" data-theme="b" id="pay">Make Payment</a>
-			<a href="#routes" data-role="button" data-direction="reverse">Cancel</a>
-		</section>
   </div>
 
   <div data-role="page" id="ticket-payment-ok" data-theme="a">
     	<div data-role="content">
 			<h3>Success!</h3>
 			<p>
-                Your payment was successful! Ticket has been added to your tickets.
-                GHc 1.00 has been deducted from your account.
+                Ticket has been added to your tickets!
+                GHc 1.00 was billed to your mobile money account.
             </p>
 			<a href="#ticket-detail" data-role="button" data-theme="b">View Ticket</a>     
 			<a href="#index" data-role="button" data-direction="reverse" data-theme="d">Okay</a>
 		</div>
   </div>
 
-  <div data-role="page" id="ticket-payment-failure">
+  <div data-role="page" id="ticket-payment-fail">
     	<div data-role="content" data-theme="a">
 			<h3>Ooopps!</h3>
-			<p>There was a problem processing your payment.</p>
-			<a href="#ticket-payment" data-rel="dialog" data-role="button" data-transition="slideup" data-theme="c">Try again</a>
+			<p id="error_message">There was a problem processing your payment.</p>
+			<a href="#routes" data-rel="dialog" data-role="button" data-transition="slideup" data-theme="c">Try again</a>
 			<a href="#index" data-role="button" data-theme="a" data-direction="reverse">Naah! Quit</a>
 		</div>
   </div>
@@ -156,13 +139,21 @@
 		</div>
     	<section data-role="content">
     		<form method="post">
-		    	<input type="text"   name="user[name]" placeholder="Name" />
-		    	<input type="email"  name="user[email]" placeholder="Email" />
-		    	<input type="text"    name="user[number]" placeholder="Mobile Number" />
-		    	<input type="hidden" name="user[app_key]" />
-				<input type="checkbox" id="set-default-number" />
-				<label for="set-default-number">Set mobile number as default for mobile money</label>
-				
+                <fieldset>
+                    <h2>Personal Details</h2>
+                    <input type="text"   name="user[name]" placeholder="Name" />
+                    <input type="email"  name="user[email]" placeholder="Email" />
+                </fieldset>
+
+                <fieldset>
+                    <h2>Billing Details</h2>
+                    <h4>Mobile Money account to be bill on every ticket purchase.</h4>
+                    <p>Enter mobile number in International format e.g 233123456789</p>
+                    <input type="text"    name="user[number]" placeholder="Mobile Money Number" />
+                    <input type="password" id="pin" placeholder="4 digit Mobile Money PIN" />
+                    <p>*Note: Your PIN is secure. We do not store or reproduce you PIN anywhere.</p>
+                </fieldset>
+                <input type="hidden" name="user[app_key]" />
 		    	<button data-icon="check" data-theme="e" data-inline="true" data-transition="flip">Save</button>
 	    	</form>
     	</section>

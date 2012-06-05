@@ -2,21 +2,21 @@
 var store = window.localStorage;
 
 /** Define URLs to Server API */
-var base_url = 'http://0.0.0.0:3080/api';
+var base_url = 'http://localhost:3080/api';
 var urls = {
-    data:      base_url + '/data',
-    feedback:  base_url + '/feedbacks',
-    tickets:   base_url + '/tickets',
-    account:   base_url + '/accounts'
+    data:base_url + '/data',
+    feedback:base_url + '/feedbacks',
+    tickets:base_url + '/tickets',
+    account:base_url + '/accounts'
 };
 
 /** Declare Singleton global variable for app */
 var app = {
-    account: {},
-    data:    {},
+    account:{},
+    data:{},
     feedback:{},
-    tickets: {},
-    payment: { mobileMoneyNumber:null }
+    tickets:{},
+    payment:{ mobile:null, pin:null }
 };
 
 /** Declare instance class to clone app */
@@ -33,13 +33,13 @@ var AppInstance = function (prop, value) {
 };
 
 /* Declare Singleton global variable for passing data through screens */
-var selected = { ticket: null };
+var selected = { ticket:null, error:null };
 
-if (Modernizr.localstorage) {
+//if (Modernizr.localstorage) {
     if (store.getItem('app')) {
         app = JSON.parse(store.getItem('app'));
     }
-}
+//}
 
 $.each(['account', 'data', 'feedback', 'tickets', 'payment'], function (index, object) {
     app.watch(object, function (prop, oldval, newval) {
@@ -50,58 +50,106 @@ $.each(['account', 'data', 'feedback', 'tickets', 'payment'], function (index, o
 });
 
 var resync = {
-    account: function (json) { app.account = json },
-    data: function (json) { app.data = json },
-    feedback: function (json) { app.feedback = json },
-    tickets: function (json) { app.tickets = json }
+    account:function (json) {
+        app.account = json
+    },
+    data:function (json) {
+        app.data = json
+    },
+    feedback:function (json) {
+        app.feedback = json
+    },
+    tickets:function (json) {
+        app.tickets = json
+    }
 };
 
 /** This is like a cron for updating tickets status */
-var cron = {
-    ready : false,
-    run : function(){
-        var now = new Date,
-            tickets = new Array;
-        $.each(app.tickets, function(i,ticket) {
+var cron;
+cron = {
+    ready:false,
+    run:function () {
+        var now = new Date(),
+            tickets = new Array();
+        $.each(app.tickets, function (i, ticket) {
             // if status is active and arrival time of train is past now
-            if (ticket.status == 'active') {
+            if (ticket.status === 'active') {
                 var weight = (new Date(ticket.schedule.arrives_at)).getHours() * 60
                         + (new Date(ticket.schedule.arrives_at)).getMinutes(),
                     Weight = now.getHours() * 60 + now.getMinutes();
 
                 if (Weight > weight) tickets.push(ticket.id);
-            };
+            }
+            ;
         });
         if (tickets.length > 0) {
             $.ajax({
-                url:urls.tickets + '/edit/' + tickets.join(',') + '?callback=?',
+                url:urls.tickets + '/edit/' + tickets + '?callback=?',
                 dataType:'jsonp',
-                data:"status=used&app_key=" + app.account.app_key,
-                success:resync.tickets
-            }).complete(function(){cron.ready=false; tickets = []});
+                data: "status=used&app_key=" + app.account.app_key,
+                success: resync.tickets
+            });
         };
+        cron.ready = false;
+        tickets = null;
+        return null;
     }
 };
 
-cron.watch('ready', function(prop,oldVal,newVal) {
-    console.log('watching cron: ready ' + cron.ready);
-    if (newVal === true) cron.run();
+cron.watch('ready', function (prop, oldVal, newVal) {
+    if (newVal === true) {
+        //console.log('Running background cron...');
+        cron.run();
+    }
     return newVal;
 });
+
+
+var ERROR_MESSAGES = {
+
+    //Insufficient balance -- your fault
+    1: "Sorry but your payment could not be processed. Are you sure you have enough funds left on your mobile money account?",
+
+    //Invalid Transaction amount -- server fault. try again
+    2: "Sorry but your ticket could not be issued. Please try again soon, or contact us if this problem persists.",
+
+    //Invalid Mobile Number --  your fault
+    3: "Sorry, we could not process your payment. Are you sure your mobile money number " + app.payment.mobile
+        +" is correct? You may update this in your Account Settings, and try again.",
+
+    //Invalid PIN -- your fault
+    4: "Sorry, we could not process your payment. Are you sure your mobile money PIN is correct? "
+        + "You may update it again in your Account Settings, and try back.",
+
+    //Incomplete parameters -- your fault
+    5: "Sorry, we could not process your payment. Are you sure you have updated your Billing Info? "
+        + "To be sure, update your mobile money number and PIN info in your Account Settings, and try again.",
+
+    //Unknown error -- obviously, server fault. try again
+    6: "Sorry but your ticket could not be issued. Please try again soon, or contact us if this problem persists."
+
+}
+
+
+
 
 $(document).on('ready', function () {
 
     $('div#settings').on('submit', 'form', function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
+
+        app.payment.mobile = $('input[name="user[number]"]').val();
+        app.payment.pin = $('input#pin').val();
+
         $.ajax({
             url:urls.account + '?callback=?',
             dataType:'jsonp',
             data:$(this).serialize(),
             success:resync.account
         }).complete(function () {
-            $.mobile.changePage($('div#index'));
-        });
+                $.mobile.changePage($('div#index'));
+            });
     });
 
     $('div#feedback-new').on('submit', 'form', function (e) {
@@ -113,8 +161,8 @@ $(document).on('ready', function () {
             data:$(this).serialize() + "&app_key=" + app.account.app_key,
             success:resync.feedback
         }).complete(function () {
-            $.mobile.changePage($('div#feedback'));
-        });
+                $.mobile.changePage($('div#feedback'));
+            });
     });
 
     // On 1st launch: if no app.account.app_key in LocalStorage,
@@ -168,7 +216,62 @@ $(document).on('pagecreate', 'div#routes', function () {
         $('div#routes').trigger('create');
     });
 
+    $('a#pay').live('click tap', function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        if (isNaN(app.payment.mobile) || isNaN(app.payment.pin)) {
+            // prompt user to update billing info
+
+        };
+
+
+        // send the chosen schedule_id, with the app_key and the mobile_money_number
+        var schedule_id = (function () {
+            var id = null;
+            $('input[id^="schedule-"]').each(function () {
+                if (this.checked == true) id = this.value;
+            });
+            return id;
+        })();
+
+        var data = "ticket[schedule_id]=" + schedule_id +
+                   "&app_key=" + app.account.app_key +
+                   "&billing_account[mobile]=" + app.payment.mobile +
+                   "&billing_account[pin]=" + app.payment.pin ;
+
+        $.ajax({
+            url:urls.tickets + '/new?callback=?',
+            dataType:'jsonp',
+            data:data,
+            success: function(json){
+                if (json.error) {
+                    selected.error = json.error;
+                    $.mobile.changePage($('div#ticket-payment-fail'), { transition:"slidedown"});
+                    return;
+                }
+                else {
+                    //console.log(json);
+                    resync.tickets(json);
+                    selected.ticket = app.tickets[0];
+                    $.mobile.changePage($('div#ticket-payment-ok'), { transition:"slideup"});
+                }
+            }
+        });
+    });
 });
+
+$(document).on('pageshow', 'div#ticket-payment-fail', function () {
+    //var keys = Object.keys(selected.error);
+    //if (typeof selected.error !== null) {
+    $('p#error_message').html(ERROR_MESSAGES[selected.error.code]);
+    //}
+});
+
+$(document).on('pagehide', 'div#ticket-payment-fail', function () {
+    selected.error = null;
+});
+
 
 $(document).on('pageshow', 'div#tickets', function () {
     cron.ready = true;
@@ -192,53 +295,6 @@ $(document).on('pageshow', 'div#tickets', function () {
         selected.ticket = app.tickets[$(this).parents('li').jqmData('ticket-index')];
         // forward to intended screen
         $.mobile.changePage($($.mobile.path.parseUrl(this.href).hash));
-    });
-});
-
-$(document).on('pageshow', 'div#ticket-payment', function () {
-
-    // If there's phone number in the account, number as mobile money number
-    if (isNaN(app.payment.mobileMoneyNumber)) {
-        $('input[name="mobile_money_number"]').val(app.payment.mobileMoneyNumber);
-    };
-
-    $('div#ticket-payment').on('click tap', 'a#pay', function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        var mobile = $('input[name="mobile_money_number"]').val();
-
-        if ($('input#set-default').checked) {
-            app.payment = { mobileMoneyNumber: mobile };
-        }
-
-        // send the chosen schedule_id, with the app_key and the mobile_money_number
-        var schedule_id = (function () {
-            var id = null;
-            $('input[id^="schedule-"]').each(function () {
-                if (this.checked == true) id = this.value;
-            });
-            return id;
-        })();
-
-        var data = "ticket[schedule_id]=" + schedule_id +
-            "&app_key=" + app.account.app_key +
-            "&mobile_account=" + mobile;
-
-        $.ajax({
-            url:urls.tickets + '/new?callback=?',
-            dataType:'jsonp',
-            data:data,
-            success:resync.tickets
-        }).complete(
-            function () {
-                selected.ticket = app.tickets[0];
-                $.mobile.changePage($('div#ticket-payment-ok'), { transition:"slideup"});
-            }
-        ).fail(function () {
-                $.mobile.changePage($('div#ticket-payment-fail'), { transition:"slidedown"});
-            }
-        );
     });
 });
 
@@ -341,9 +397,9 @@ $(document).on('pagecreate pageshow', 'div#live-progress', function () {
             now = new Date,
             moving = false;
 
-        var schedule = (function(schedules){
+        var schedule = (function (schedules) {
             var current = new Array;
-            $.each(schedules,function(i,o){
+            $.each(schedules, function (i, o) {
                 if ((new Date(o.departs_at)).getHours() <= now.getHours()
                     && (new Date(o.arrives_at)).getHours() >= now.getHours()) {
                     moving = true;
@@ -359,7 +415,7 @@ $(document).on('pagecreate pageshow', 'div#live-progress', function () {
             return current[0];
         })(route.scheduled_trips);
 
-        var status = function(time,terminus) {
+        var status = function (time, terminus) {
             var Time = new Date(time),
                 weight = Time.getHours() * 60 + Time.getMinutes(),
                 Weight = now.getHours() * 60 + now.getMinutes();
@@ -382,14 +438,14 @@ $(document).on('pagecreate pageshow', 'div#live-progress', function () {
 
         (function (o) {
 
-            if (!moving) $schedule_set.append('<li data-role="list-divider">Next train departs at '+ (new Date(o.departs_at)).toTwelveHourTimeString() +'</li>');
+            if (!moving) $schedule_set.append('<li data-role="list-divider">Next train departs at ' + (new Date(o.departs_at)).toTwelveHourTimeString() + '</li>');
 
             var terminals = route.name.split('-');
 
-            var tag = status(o.departs_at,'departure');
+            var tag = status(o.departs_at, 'departure');
             $schedule_set.append('<li>' +
                 '<div class="a"><span class="ui-li-count">' + (new Date(o.departs_at)).toTwelveHourTimeString() + '</span></div>' +
-                '<div class="b"><span class="status '+ tag +'">' + tag +'</span></div>' +
+                '<div class="b"><span class="status ' + tag + '">' + tag + '</span></div>' +
                 '<div class="c">' + terminals[0] + '</div></li>'
             );
 
@@ -398,15 +454,15 @@ $(document).on('pagecreate pageshow', 'div#live-progress', function () {
                 $schedule_set
                     .append('<li>' +
                     '<div class="a"><span class="ui-li-count">' + (new Date(b.arrives_at)).toTwelveHourTimeString() + '</span></div>' +
-                    '<div class="b"><span class="status '+ tag +'">' + tag +'</span></div>' +
+                    '<div class="b"><span class="status ' + tag + '">' + tag + '</span></div>' +
                     '<div class="c">' + b.name + '</div></li>'
                 );
             });
 
-            tag = status(o.arrives_at,'arrival');
+            tag = status(o.arrives_at, 'arrival');
             $schedule_set.append('<li>' +
                 '<div class="a"><span class="ui-li-count">' + (new Date(o.arrives_at)).toTwelveHourTimeString() + '</span></div>' +
-                '<div class="b"><span class="status '+ tag +'">' + tag +'</span></div>' +
+                '<div class="b"><span class="status ' + tag + '">' + tag + '</span></div>' +
                 '<div class="c">' + terminals[1] + '</div></li>'
             );
 
@@ -422,11 +478,9 @@ $(document).on('pageshow', 'div#settings', function () {
     $.each(['name', 'email', 'number', 'app_key'], function (i, o) {
         $('input[name="user[' + o + ']"]').val(app.account[o]);
     });
-    $('input#set-default-number').change(function () {
-        if (this.checked) {
-            app.payment = { mobileMoneyNumber:$('input[name="user[number]"]').val() };
-        }
-    });
+    if (!isNaN(app.payment.pin)) {
+        $('input#pin').val(app.payment.pin);
+    };
 });
 
 $(document).on('pageshow', 'div#feedback', function () {

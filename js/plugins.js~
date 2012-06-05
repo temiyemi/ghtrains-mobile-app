@@ -67,7 +67,7 @@ if (!Date.prototype.toTwelveHourTimeString) {
         if (hours == 0) hours = 12;
         if (hours > 12) hours -= 12;
         var mins = this.getMinutes();
-        if (mins < 10) mins = '0' + mins;
+        if (mins < 10) mins = '0' + mins
         return hours + ':' + mins + ext;
     };
 }
